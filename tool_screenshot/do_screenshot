@@ -1,0 +1,31 @@
+
+
+
+
+rm -rf screenshots
+mkdir screenshots
+
+did=`cat ../../../../../did`
+echo "0" > nextnumber
+echo "running" > bool_screenshot_running
+RUNNING="running"
+while :
+do
+	if [ $RUNNING != "running" ]
+  	then
+		break
+  	fi
+
+	curnumber=`cat nextnumber`
+	curdate=`date '+%Y%m%d_%H%M%S'`
+	filename="screenshots/"$curnumber"_"$curdate
+
+	./screenshot.jar -s $did $filename.png
+	curnumber=`expr $curnumber + 1`
+	echo $curnumber > nextnumber
+
+	RUNNING=`cat bool_screenshot_running`
+
+	sleep 3
+
+done

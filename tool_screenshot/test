@@ -1,0 +1,3 @@
+./do_screenshot > screenshot.log &
+adb shell monkey -p com.android.browser -v 500
+./stop_screenshot_and_collect_pics

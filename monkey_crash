@@ -1,0 +1,109 @@
+:Monkey: seed=0 count=500
+:AllowPackage: com.example.testmonkey
+:IncludeCategory: android.intent.category.LAUNCHER
+:IncludeCategory: android.intent.category.MONKEY
+// Event percentages:
+//   0: 15.0%
+//   1: 10.0%
+//   2: 15.0%
+//   3: 25.0%
+//   4: 15.0%
+//   5: 2.0%
+//   6: 2.0%
+//   7: 1.0%
+//   8: 15.0%
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10000000;component=com.example.testmonkey/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.example.testmonkey/.MainActivity } in package com.example.testmonkey
+:Sending Pointer ACTION_MOVE x=-4.0 y=2.0
+:Sending Pointer ACTION_UP x=0.0 y=0.0
+:Sending Pointer ACTION_DOWN x=47.0 y=122.0
+:Sending Pointer ACTION_UP x=29.0 y=129.0
+:Sending Pointer ACTION_DOWN x=255.0 y=259.0
+:Sending Pointer ACTION_UP x=255.0 y=259.0
+:Sending Pointer ACTION_DOWN x=295.0 y=223.0
+:Sending Pointer ACTION_UP x=290.0 y=213.0
+:Sending Pointer ACTION_MOVE x=-5.0 y=3.0
+:Sending Pointer ACTION_MOVE x=0.0 y=-5.0
+    // Rejecting start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] cmp=com.htc.launcher/.Launcher } in package com.htc.launcher
+:Sending Pointer ACTION_DOWN x=74.0 y=41.0
+:Sending Pointer ACTION_UP x=74.0 y=41.0
+:Sending Pointer ACTION_MOVE x=3.0 y=-2.0
+:Sending Pointer ACTION_UP x=0.0 y=0.0
+:Sending Pointer ACTION_MOVE x=-4.0 y=2.0
+    //[calendar_time:2012-11-05 20:48:16.129  system_uptime:193925446]
+    // Sending event #100
+:Sending Pointer ACTION_MOVE x=4.0 y=2.0
+:Sending Pointer ACTION_DOWN x=309.0 y=790.0
+:Sending Pointer ACTION_UP x=322.0 y=-10.0
+:Sending Pointer ACTION_MOVE x=0.0 y=-1.0
+:Sending Pointer ACTION_DOWN x=294.0 y=79.0
+:Sending Pointer ACTION_UP x=294.0 y=79.0
+:Sending Pointer ACTION_DOWN x=118.0 y=677.0
+:Sending Pointer ACTION_UP x=119.0 y=673.0
+:Sending Pointer ACTION_DOWN x=137.0 y=518.0
+:Sending Pointer ACTION_UP x=124.0 y=529.0
+:Sending Pointer ACTION_DOWN x=258.0 y=723.0
+:Sending Pointer ACTION_UP x=273.0 y=723.0
+:Sending Pointer ACTION_MOVE x=-5.0 y=-5.0
+    // Rejecting start of Intent { act=android.intent.action.DIAL dat=tel:0 cmp=com.android.htcdialer/.Dialer } in package com.android.htcdialer
+    //[calendar_time:2012-11-05 20:48:18.301  system_uptime:193927564]
+    // Sending event #200
+    //[calendar_time:2012-11-05 20:48:18.308  system_uptime:193927567]
+    // Sending event #200
+:Sending Pointer ACTION_MOVE x=3.0 y=2.0
+:Sending Pointer ACTION_UP x=0.0 y=0.0
+    // Rejecting start of Intent { act=android.intent.action.SET_WALLPAPER_DIALOG cmp=com.htc.launcher/.WallpaperChooserDialog } in package com.htc.launcher
+:Sending Pointer ACTION_DOWN x=146.0 y=147.0
+:Sending Pointer ACTION_UP x=146.0 y=147.0
+    // Rejecting start of Intent { act=android.intent.action.DIAL dat=tel:5 cmp=com.android.htcdialer/.Dialer } in package com.android.htcdialer
+:Sending Pointer ACTION_DOWN x=58.0 y=465.0
+:Sending Pointer ACTION_UP x=58.0 y=465.0
+:Switch: #Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;launchFlags=0x10000000;component=com.example.testmonkey/.MainActivity;end
+    // Allowing start of Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=com.example.testmonkey/.MainActivity } in package com.example.testmonkey
+:Sending Pointer ACTION_DOWN x=403.0 y=323.0
+:Sending Pointer ACTION_UP x=403.0 y=323.0
+:Sending Pointer ACTION_MOVE x=0.0 y=4.0
+:Sending Pointer ACTION_DOWN x=131.0 y=465.0
+:Sending Pointer ACTION_UP x=131.0 y=465.0
+:Sending Pointer ACTION_MOVE x=1.0 y=0.0
+    // Rejecting start of Intent { cmp=com.duomi.android/.DMMainActivity } in package com.duomi.android
+:Sending Pointer ACTION_DOWN x=240.0 y=293.0
+:Sending Pointer ACTION_UP x=240.0 y=293.0
+// CRASH: com.example.testmonkey (pid 3874)
+// Short Msg: java.lang.NullPointerException
+// Long Msg: java.lang.NullPointerException
+// Build Label: verizon_wwe/inc/inc/inc:2.2/FRF91/264707:user/release-keys
+// Build Changelist: 264707
+// Build Time: 1285855309000
+// java.lang.NullPointerException
+// 	at com.example.testmonkey.MainActivity.onClick(MainActivity.java:31)
+// 	at android.view.View.performClick(View.java:2408)
+// 	at android.view.View.onKeyUp(View.java:4120)
+// 	at android.widget.TextView.onKeyUp(TextView.java:4402)
+// 	at android.view.KeyEvent.dispatch(KeyEvent.java:1281)
+// 	at android.view.View.dispatchKeyEvent(View.java:3739)
+// 	at android.view.ViewGroup.dispatchKeyEvent(ViewGroup.java:796)
+// 	at android.view.ViewGroup.dispatchKeyEvent(ViewGroup.java:796)
+// 	at android.view.ViewGroup.dispatchKeyEvent(ViewGroup.java:796)
+// 	at android.view.ViewGroup.dispatchKeyEvent(ViewGroup.java:796)
+// 	at com.android.internal.policy.impl.PhoneWindow$DecorView.superDispatchKeyEvent(PhoneWindow.java:1697)
+// 	at com.android.internal.policy.impl.PhoneWindow.superDispatchKeyEvent(PhoneWindow.java:1111)
+// 	at android.app.Activity.dispatchKeyEvent(Activity.java:2070)
+// 	at com.android.internal.policy.impl.PhoneWindow$DecorView.dispatchKeyEvent(PhoneWindow.java:1673)
+// 	at android.view.ViewRoot.deliverKeyEventToViewHierarchy(ViewRoot.java:2493)
+// 	at android.view.ViewRoot.handleFinishedEvent(ViewRoot.java:2463)
+// 	at android.view.ViewRoot.handleMessage(ViewRoot.java:1752)
+// 	at android.os.Handler.dispatchMessage(Handler.java:99)
+// 	at android.os.Looper.loop(Looper.java:144)
+// 	at android.app.ActivityThread.main(ActivityThread.java:4937)
+// 	at java.lang.reflect.Method.invokeNative(Native Method)
+// 	at java.lang.reflect.Method.invoke(Method.java:521)
+// 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:868)
+// 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:626)
+// 	at dalvik.system.NativeStart.main(Native Method)
+// 
+** Monkey aborted due to error.
+Events injected: 265
+:Dropped: keys=7 pointers=22 trackballs=0 flips=0
+## Network stats: elapsed time=7870ms (0ms mobile, 7870ms wifi, 0ms not connected)
+** System appears to have crashed at event 265 of 500 using seed 0
