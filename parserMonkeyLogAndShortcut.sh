@@ -1,18 +1,16 @@
 #!/bin/sh
 
-clear
-adb logcat -c
 usage() 
 {
   echo "  "
   echo "  "  
   echo "Usage: $0 packagename event_num img_count devices"
-  echo " packagename: eg. com.dolphin.browser.cn"
+  echo " packagename: eg. mobi.mgeek.TunnyBrowser"
   echo " event_num: eg. 10000"
   echo " img_count: eg. 10"
   echo " devices 38334C1B4C5F00EC"
   echo " eg:"
-  echo " $0 com.dolphin.browser.cn 10000 10 38334C1B4C5F00EC"
+  echo " $0 mobi.mgeek.TunnyBrowser 10000 10 38334C1B4C5F00EC"
   echo "  "
   echo "  "
 
@@ -28,11 +26,13 @@ packagename="$1"
 event_num=$2
 img_count=$3
 devices=$4
-if [[ $((event_num/1000/img_count)) -eq 0 ]]; then
-   echo "event_num must larger than 1000*$img_count"
+if [ $((event_num/100/img_count)) -eq 0 ]; then
+   echo "event_num must larger than 100*$img_count"
    usage
    exit 1
 fi
+
+echo $packagename $event_num $img_count $devices
 
 #define filter keyword
 BEGIN_PATTERN=":Monkey:"
@@ -49,7 +49,7 @@ find_keyword()
 		exit 1
 	fi
 	mm=`awk 'BEGIN {print index("'"$1"'", "'"$2"'")}'`
-	if [ $mm -gt 0 ]; then
+	if [ -n $mm -a $mm -gt 0 ]; then
 		echo 1
 		return;		
 	fi
@@ -74,6 +74,7 @@ flag=0
 
 #define image path and filename
 path="screenshots"
+rm -rf $path
 if [ ! -d $path ]; then
     mkdir $path
 fi
@@ -86,6 +87,7 @@ surplus_file="surplus_file_temp"
 
 crash_value=0
 responding_value=0
+
 
 parseLog()
 {
@@ -119,7 +121,7 @@ parseLog()
     fi
 
     echo "div:"$div
-    adb shell monkey -p $packagename -v $event_num | while read line
+    adb -s $devices shell monkey -p $packagename -v $event_num | while read line
     do 
         line=`echo " "$line | sed s/**//g `
         mm=`find_keyword "$line" "$BEGIN_PATTERN"`
@@ -134,13 +136,14 @@ parseLog()
             echo "cur:"$cur_num
             echo "pre:"$pre_num
             if [ $cur_num -ne $pre_num ]; then
-                echo $line
+                echo "$event_num : $line"
                 pre_num=$cur_num
 
                 #shortcut img
                 if [ $((img_num%div)) -eq 0 ]; then
                     echo "===>screenshots: "$img_num
                     cur_date=`date '+%Y%m%d_%H%M%S'`
+                    echo $cur_date
                     screenshots "${filename}${cur_date}_${img_num}"
                 fi
                 img_num=$((img_num+1))
@@ -153,18 +156,18 @@ parseLog()
         respond_flag=`find_keyword "$line" "$APP_NOT_RESPONDING_PATTERN"`
     
         if [ $crash_flag -ne 0 -o $respond_flag -ne 0 ]; then
-            echo "****************************************************************************************"
+            echo "********************************************************************************************"
             flag=1
             cur_date=`date '+%Y%m%d_%H%M%S'`
             if [ $crash_flag -eq 1 ]; then
                 echo "===>screenshots for crash "
                 screenshots "${filename}crash_${cur_date}_${crash_value}"
                 crash_value=$((crash_value+1))
-                echo $crash_value > $crash_file
+                echo $crash_value > $crash_file 
             fi
 
             if [ $respond_flag -eq 1 ]; then
-                echo "===>screenshots for crash "
+                echo "===>screenshots for not responding "
                 screenshots "${filename}non_respond_${cur_date}_${responding_value}"
                 responding_value=$((responding_value+1))
                 echo $responding_value > $responding_file
@@ -194,7 +197,7 @@ parseLog()
                 return 1
             else
                 echo $line
-                echo $SUCCESS_PATTERN " Success."
+                echo $SUCCESS_PATTERN " Success." 
                 return 0
             fi
 
@@ -207,7 +210,16 @@ parseLog()
 #clear crash file and not responding file value.
 echo 0 > $crash_file
 echo 0 > $responding_file
+>$surplus_file
 
+logfile="log"
+>$logfile
+open_logcat_flag="open_logcat_flag"
+
+#set flag 1 to open filter adb logcat log information.
+echo 1 > $open_logcat_flag
+#start filter log info
+./filterLogcat.sh "$devices" &
 while [ 1 ];
 do
     #parser monkey log information.
@@ -218,8 +230,14 @@ do
         if [ ! -n " $event_num" ]; then
             break;
         fi
+        echo "==========================================>"
     else
         break;
     fi
 done
 
+#set flag to stop filter adb logcat log information.
+echo 0 > $open_logcat_flag
+rm $crash_file
+rm $responding_file
+rm $surplus_file
