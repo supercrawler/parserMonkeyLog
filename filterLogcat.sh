@@ -11,7 +11,7 @@ logfile="log"
 
 open_logcat_flag="open_logcat_flag"
 #define filter tag
-REPORT_FILE_PATH_PATTERN="Dolphin_Report_File_Path:"
+REPORT_FILE_PATH_PATTERN="Dolphin_Report_File_Path"
 
 path="reports"
 rm -rf $path
@@ -38,6 +38,7 @@ do
     line=`removeInvalideChar "$line"`
     #echo $line
     #mm=`awk 'BEGIN {print index("'"$line"'", "'"$REPORT_FILE_PATH_PATTERN"'")}'`
+    #echo "awk '/ $REPORT_FILE_PATH_PATTERN/{print;}'"
     mm=`echo $line | awk '/ Dolphin_Report_File_Path/{print;}'`
     if [[ -n $mm ]]; then
         echo $line 

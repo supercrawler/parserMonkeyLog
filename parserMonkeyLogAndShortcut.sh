@@ -48,8 +48,9 @@ find_keyword()
 		echo "Usage $0 line pattern "
 		exit 1
 	fi
-	mm=`awk 'BEGIN {print index("'"$1"'", "'"$2"'")}'`
-	if [[ -n $mm && $mm -gt 0 ]]; then
+	#mm=`awk 'BEGIN {print index("'"$1"'", "'"$2"'")}'`
+    mm=`echo "$1" | awk '/$2/{print;}'`
+	if [[ -n $mm ]]; then
 		echo 1
 		return;
 	fi
@@ -141,14 +142,16 @@ parseLog()
         #remove invalide character.
         line=`removeInvalideChar "$line" `
 
-        mm=`find_keyword "$line" "$BEGIN_PATTERN"`
-        if [[ $mm -gt 0 ]]; then
+        #mm=`find_keyword "$line" "$BEGIN_PATTERN"`
+        mm=`echo "$line" | awk '/:Monkey:/{print;}'`
+        if [[ -n $mm ]]; then
             echo $line
             continue
         fi
 
-        mm=`find_keyword "$line" "$SEND_EVENT_PATTERN"`
-        if [[ $mm -gt 0 ]]; then
+       # mm=`find_keyword "$line" "$SEND_EVENT_PATTERN"`
+        mm=`echo "$line" | awk '/\/\/ Sending event/{print;}'`
+        if [[ -n $mm ]]; then
             cur_num=`echo "$line" | grep -o "[0-9]*"`
             echo "cur:"$cur_num
             echo "pre:"$pre_num
@@ -172,20 +175,23 @@ parseLog()
         fi
 
         #filter crash log and not responding log
-        crash_flag=`find_keyword "$line" "$CRASH_PATTERN"`
-        respond_flag=`find_keyword "$line" "$APP_NOT_RESPONDING_PATTERN"`
-        if [[ $crash_flag -ne 0 || $respond_flag -ne 0 ]]; then
+        #crash_flag=`find_keyword "$line" "$CRASH_PATTERN"`
+        crash_flag=`echo "$line" | awk '/\/\/ CRASH:/{print;}'`
+        respond_flag=`echo "$line" | awk '/\/\/ NOT RESPONDING\:/{print;}'`
+        #respond_flag=`find_keyword "$line" "$APP_NOT_RESPONDING_PATTERN"`
+
+        if [[ -n $crash_flag || -n $respond_flag ]]; then
             echo "********************************************************************************************"
             flag=1
             cur_date=`date '+%Y%m%d_%H%M%S'`
-            if [[ $crash_flag -eq 1 ]]; then
+            if [[ -n $crash_flag ]]; then
                 echo "===>screenshots for crash "
                 screenshots "${filename}crash_${cur_date}_${crash_value}"
                 crash_value=$((crash_value+1))
                 echo $crash_value > $crash_file 
             fi
 
-            if [[ $respond_flag -eq 1 ]]; then
+            if [[ -n $respond_flag ]]; then
                 echo "===>screenshots for not responding "
                 screenshots "${filename}non_respond_${cur_date}_${responding_value}"
                 responding_value=$((responding_value+1))
@@ -197,8 +203,9 @@ parseLog()
             echo $line
         fi
 
-        mm=`find_keyword "$line" "$EVENTS_INJECT_PATTERN"`
-        if [[ $mm -gt 0 ]]; then
+        #mm=`find_keyword "$line" "$EVENTS_INJECT_PATTERN"`
+        mm=`echo "$line" | awk '/Events injected:/{print;}'`
+        if [[ -n $mm ]]; then
             #screen shot 
             #img_num=$((img_num+1))
             #echo "===>screenshots: "$img_num
