@@ -34,11 +34,12 @@ removeInvalideChar()
 flag=1
 adb -s "$devices" logcat | while read line;
 do
-    line=`echo "$line" | sed  -e 's/\./ /g' `
+    #line=`echo "$line" | sed  -e 's/\./ /g' `
     line=`removeInvalideChar "$line"`
     #echo $line
-    mm=`awk 'BEGIN {print index("'"$line"'", "'"$REPORT_FILE_PATH_PATTERN"'")}'`
-    if [[ -n $mm && $mm -gt 0 ]]; then
+    #mm=`awk 'BEGIN {print index("'"$line"'", "'"$REPORT_FILE_PATH_PATTERN"'")}'`
+    mm=`echo $line | awk '/ Dolphin_Report_File_Path/{print;}'`
+    if [[ -n $mm ]]; then
         echo $line 
         cur_date=`date '+%Y%m%d%H%M%S'`
         filename="$path/report_${cur_date}.zip"
