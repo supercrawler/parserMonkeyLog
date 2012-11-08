@@ -37,3 +37,27 @@ do
   echo $i
   i=$((i+1))
 done
+
+select var in "begin" "end" "exit";
+do 
+  case $var in 
+    "begin")
+       echo "starting..."
+       break;
+       ;;
+     "end")
+       echo "stoping...."
+       break;
+       ;;
+     "exit")
+       echo "exit"
+       break;
+       ;;
+     *)
+       echo "ignore..."
+       break;
+       ;;
+     esac
+done 
+
+echo "Your have selected $var"
